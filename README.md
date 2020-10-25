@@ -1,1 +1,1 @@
-# ImageHoster_
+# ImageHoster -- [Spring | Hibernate | postgress]
