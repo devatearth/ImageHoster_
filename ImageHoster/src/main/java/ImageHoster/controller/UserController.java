@@ -5,6 +5,7 @@ import ImageHoster.model.User;
 import ImageHoster.model.UserProfile;
 import ImageHoster.service.ImageService;
 import ImageHoster.service.UserService;
+import ImageHoster.service.ValidatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ValidatorService validatorService;
 
     @Autowired
     private ImageService imageService;
@@ -40,9 +44,16 @@ public class UserController {
     //This controller method is called when the request pattern is of type 'users/registration' and also the incoming request is of POST type
     //This method calls the business logic and after the user record is persisted in the database, directs to login page
     @RequestMapping(value = "users/registration", method = RequestMethod.POST)
-    public String registerUser(User user) {
-        userService.registerUser(user);
-        return "redirect:/users/login";
+    public String registerUser(User user,Model model) {
+        //checks if the entered password is valid or not
+        if(validatorService.checkPasswordStrength(user.getPassword())) {
+            userService.registerUser(user);
+            return "redirect:/users/login";
+        }else{
+            model.addAttribute("User", user);
+            model.addAttribute("passwordTypeError","Password must contain at least 1 alphabet, 1 number & 1 special character");
+            return "users/registration";
+        }
     }
 
     //This controller method is called when the request pattern is of type 'users/login'
