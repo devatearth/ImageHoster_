@@ -5,6 +5,7 @@ import ImageHoster.model.Tag;
 import ImageHoster.model.User;
 import ImageHoster.service.ImageService;
 import ImageHoster.service.TagService;
+import ImageHoster.service.ValidatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,9 @@ public class ImageController {
 
     @Autowired
     private ImageService imageService;
+
+    @Autowired
+    private ValidatorService validatorService;
 
     @Autowired
     private TagService tagService;
@@ -94,15 +98,28 @@ public class ImageController {
 
     //The method first needs to convert the list of all the tags to a string containing all the tags separated by a comma and then add this string in a Model type object
     //This string is then displayed by 'edit.html' file as previous tags of an image
+    //cheking if the user of the image and session is same or not and handling the edit operation
     @RequestMapping(value = "/editImage")
-    public String editImage(@RequestParam("imageId") Integer imageId, Model model) {
-        Image image = imageService.getImage(imageId);
+    public String editImage(@RequestParam("imageId") Integer imageId, Model model,HttpSession session) {
+        Image currentImage = imageService.getImage(imageId);
+        User sessionUser  = (User)session.getAttribute("loggeduser");
+        User imageOwner = currentImage.getUser();
+        if(validatorService.checkUser(sessionUser,imageOwner)){
+            Image image = imageService.getImage(imageId);
+            String tags = convertTagsToString(image.getTags());
+            model.addAttribute("image", image);
+            model.addAttribute("tags", tags);
+            return "images/edit";
+        }else{
+            model.addAttribute("editError","Only the owner of the image can edit the image");
+            model.addAttribute("image",currentImage);
+            model.addAttribute("tags", currentImage.getTags());
 
-        String tags = convertTagsToString(image.getTags());
-        model.addAttribute("image", image);
-        model.addAttribute("tags", tags);
-        return "images/edit";
+            return "/images/image";
+        }
+
     }
+
 
     //This controller method is called when the request pattern is of type 'images/edit' and also the incoming request is of PUT type
     //The method receives the imageFile, imageId, updated image, along with the Http Session
@@ -142,10 +159,21 @@ public class ImageController {
     //This controller method is called when the request pattern is of type 'deleteImage' and also the incoming request is of DELETE type
     //The method calls the deleteImage() method in the business logic passing the id of the image to be deleted
     //Looks for a controller method with request mapping of type '/images'
+    //Checking if the session user matches the owner of image and handling the delete accordingly
     @RequestMapping(value = "/deleteImage", method = RequestMethod.DELETE)
-    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId) {
-        imageService.deleteImage(imageId);
-        return "redirect:/images";
+    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId,HttpSession session,Model model) {
+        User sessionUser = (User)session.getAttribute("loggeduser");
+        Image currentImage = imageService.getImage(imageId);
+        User imageUser = currentImage.getUser();
+        if(validatorService.checkUser(sessionUser,imageUser)) {
+            imageService.deleteImage(imageId);
+            return "redirect:/images";
+        }else{
+            model.addAttribute("deleteError","Only the owner of the image can delete the image");
+            model.addAttribute("image",currentImage);
+            model.addAttribute("tags", currentImage.getTags());
+            return "/images/image";
+        }
     }
 
 
