@@ -5,11 +5,13 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
 
+//The annotation is a special type of @Component annotation which describes that the class defines a data repository
 @Repository
 public class TagRepository {
     @PersistenceUnit(unitName = "imageHoster")
     private EntityManagerFactory emf;
 
+    //This method creates a tag to a particular image
     public Tag createTag(Tag tag) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
@@ -24,6 +26,7 @@ public class TagRepository {
         return tag;
     }
 
+    //This method finds the tag based on tagname
     public Tag findTag(String tagName) {
         EntityManager em = emf.createEntityManager();
         try {

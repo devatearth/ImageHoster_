@@ -25,7 +25,7 @@ public class Comments {
     private Date createdDate;
 
     //One user can have multiple comments
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     //one image can have multiple comments

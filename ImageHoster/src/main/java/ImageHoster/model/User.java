@@ -9,7 +9,7 @@ import java.util.List;
 //@Table annotation provides more options to customize the mapping.
 //Here the name of the table to be created in the database is explicitly mentioned as 'users'. Hence the table named 'users' will be created in the database with all the columns mapped to all the attributes in 'User' class
 @Table(name = "users")
-public class User {
+public class User<comments, Private> {
 
     //@Id annotation specifies that the corresponding attribute is a primary key
     @Id
@@ -19,9 +19,11 @@ public class User {
     @Column(name = "id")
     private Integer id;
 
+    //@Column annotation specifies that the attribute will be mapped to the column in the database.
     @Column(name = "username")
     private String username;
 
+    //@Column annotation specifies that the attribute will be mapped to the column in the database.
     @Column(name = "password")
     private String password;
 
@@ -38,8 +40,9 @@ public class User {
     //The table (primary key) is referenced by the 'user' field in the 'images' table
     //cascade = CascadeType.REMOVE specifies that if a record in 'users' table is deleted, then all the records in 'images' table associated to that particular record in 'users' table will be deleted first and then the record in the 'users' table will be deleted
     //FetchType is LAZY
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Image> images = new ArrayList<>();
+
 
     public Integer getId() {
         return id;

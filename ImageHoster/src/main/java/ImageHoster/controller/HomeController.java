@@ -15,6 +15,7 @@ public class HomeController {
     @Autowired
     private ImageService imageService;
 
+    //This method gets all the images available in db and directs to index.html. This is the homepage.
     @RequestMapping("/")
     public String getAllImages(Model model) {
         List<Image> images = imageService.getAllImages();

@@ -18,12 +18,15 @@ public class UserProfile {
     @Column(name = "id")
     private Integer id;
 
+    //@Column annotation specifies that the attribute will be mapped to the column in the database.
     @Column(name = "full_name")
     private String fullName;
 
+    //@Column annotation specifies that the attribute will be mapped to the column in the database.
     @Column(name = "email_address")
     private String emailAddress;
 
+    //@Column annotation specifies that the attribute will be mapped to the column in the database.
     @Column(name = "mobile_number")
     private String mobileNumber;
 

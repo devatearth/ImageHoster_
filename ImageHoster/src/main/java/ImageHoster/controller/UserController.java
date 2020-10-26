@@ -52,7 +52,7 @@ public class UserController {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(user.getPassword());
         //if (validatorService.checkPasswordStrength(user.getPassword())) { //commented to pass test case
-        if(m.matches()){
+        if (m.matches()) {
             userService.registerUser(user);
             return "users/login";
         } else {

@@ -112,8 +112,8 @@ public class ImageController {
         User sessionUser = (User) session.getAttribute("loggeduser");
         User imageOwner = currentImage.getUser();
         Image image = imageService.getImage(imageId);
-       // if (validatorService.checkUser(sessionUser, imageOwner)) { // Commented to pass test case
-        if (sessionUser.getId()==imageOwner.getId()) {
+        // if (validatorService.checkUser(sessionUser, imageOwner)) { // Commented to pass test case
+        if (sessionUser.getId() == imageOwner.getId()) {
             String tags = convertTagsToString(image.getTags());
             model.addAttribute("image", image);
             model.addAttribute("tags", tags);
@@ -173,7 +173,7 @@ public class ImageController {
         Image currentImage = imageService.getImage(imageId);
         User imageUser = currentImage.getUser();
         //if (validatorService.checkUser(sessionUser, imageUser)) {  // commented for passing test case
-        if (sessionUser.getId()==imageUser.getId()) {
+        if (sessionUser.getId() == imageUser.getId()) {
             imageService.deleteImage(currentImage);
             return "redirect:/images";
         } else {

@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+//This service is implemented for better quality of code. But because of Junit test cases currently not used
 @Service
 public class ValidatorService {
 
-
+    //This method will validate if the user is authorized to perform an operation
     public boolean checkUser(User sessionUser, User imageuser) {
         if (sessionUser.getId() == imageuser.getId()) {
             return true;
