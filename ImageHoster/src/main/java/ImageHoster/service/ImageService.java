@@ -5,14 +5,15 @@ import ImageHoster.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
 public class ImageService {
     @Autowired
     private ImageRepository imageRepository;
+
+    @Autowired
+    private CommentService commentsService;
 
     //Call the getAllImages() method in the Repository and obtain a List of all the images in the database
     public List<Image> getAllImages() {
@@ -42,8 +43,9 @@ public class ImageService {
     }
 
     //The method calls the deleteImage() method in the Repository and passes the Image id of the image to be deleted in the database
-    public void deleteImage(Integer imageId) {
-        imageRepository.deleteImage(imageId);
+    public void deleteImage(Image image) {
+        commentsService.deleteComments(image);
+        imageRepository.deleteImage(image);
     }
 
 }
