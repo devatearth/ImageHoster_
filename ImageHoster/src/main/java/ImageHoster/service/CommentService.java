@@ -14,12 +14,12 @@ public class CommentService {
     @Autowired
     private CommentsRepository commentsRepository;
 
-    public void writeComment(Comments comment){
+    public void writeComment(Comments comment) {
         commentsRepository.writecomment(comment);
     }
 
-    public List<Comments> getComment(Image image){
-       return  commentsRepository.getComment(image);
+    public List<Comments> getComment(Image image) {
+        return commentsRepository.getComment(image);
     }
 
     public void deleteComments(Image image) {

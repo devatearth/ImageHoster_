@@ -107,7 +107,7 @@ public class ImageRepository {
             em.remove(image);
             transaction.commit();
         } catch (Exception e) {
-            System.out.println("exception occured in image repository"+e);
+            System.out.println("exception occured in image repository" + e);
             transaction.rollback();
         }
     }

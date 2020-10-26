@@ -45,7 +45,6 @@ public class Image {
     //FetchType is EAGER
     //Below annotation indicates that the name of the column in 'images' table referring the primary key in 'users' table will be 'user_id'
     @ManyToOne(fetch = FetchType.EAGER)
-    //Below annotation indicates that the name of the column in 'images' table referring the primary key in 'users' table will be 'user_id'
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -55,7 +54,7 @@ public class Image {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Tag> tags = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Comments> comments = new ArrayList<Comments>();
 
     public List<Comments> getComments() {
@@ -83,7 +82,6 @@ public class Image {
         this.description = description;
         this.date = date;
     }
-
 
 
     public Integer getId() {

@@ -24,16 +24,17 @@ public class CommentController {
     @Autowired
     private ImageService imageService;
 
+    //This method writes the comment from UI to postgress
     @RequestMapping("/image/{id}/{title}/comments")
     public String writeComment(@PathVariable("id") int id, @PathVariable("title") String title, @RequestParam("comment") String comment, Model model, HttpSession session) {
         System.out.println(comment);
         Comments newComment = new Comments();
         newComment.setCreatedDate(new Date());
         newComment.setImage(imageService.getImage(id));
-        User sessionUser = (User)session.getAttribute("loggeduser");
+        User sessionUser = (User) session.getAttribute("loggeduser");
         newComment.setUser(sessionUser);
         newComment.setText(comment);
         commentsService.writeComment(newComment);
-        return "redirect:/images/"+id +"/"+ title;
+        return "redirect:/images/" + id + "/" + title;
     }
 }

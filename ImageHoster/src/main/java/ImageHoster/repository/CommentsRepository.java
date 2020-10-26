@@ -12,8 +12,8 @@ public class CommentsRepository {
 
     @PersistenceUnit(unitName = "imageHoster")
     private EntityManagerFactory emf;
-    
-    public void writecomment(Comments comment){
+
+    public void writecomment(Comments comment) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
         System.out.println(comment);
@@ -36,10 +36,11 @@ public class CommentsRepository {
             return null;
         }
     }
-    public void deleteComments(List<Comments> comments){
+
+    public void deleteComments(List<Comments> comments) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
-        for (Comments comment:comments) {
+        for (Comments comment : comments) {
             try {
                 transaction.begin();
                 Comments oneComment = em.find(Comments.class, comment.getId());
@@ -48,6 +49,7 @@ public class CommentsRepository {
             } catch (Exception e) {
                 System.out.println("error occured in comment repository" + e);
                 transaction.rollback();
+
             }
         }
     }

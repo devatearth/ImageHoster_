@@ -5,6 +5,7 @@ import ImageHoster.model.User;
 import ImageHoster.model.UserProfile;
 import ImageHoster.service.ImageService;
 import ImageHoster.service.UserService;
+import ImageHoster.service.ValidatorService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -36,6 +37,9 @@ public class UserControllerTest {
 
     @MockBean
     private ImageService imageService;
+
+    @MockBean
+    private ValidatorService validatorService;
 
     //This test checks the controller logic for user signup when user requests for a registration form and checks whether the logic returns the html file 'users/registration.html'
     @Test
@@ -72,7 +76,7 @@ public class UserControllerTest {
     public void signupWithCorrectPasswordType() throws Exception {
         User user = new User();
         UserProfile userProfile = new UserProfile();
-        userProfile.setId(1);
+        userProfile.setId(100);
         userProfile.setEmailAddress("a@gmail.com");
         userProfile.setFullName("Abhi Mahajan");
         userProfile.setMobileNumber("9876543210");
