@@ -1,8 +1,10 @@
 package ImageHoster.controller;
 
+import ImageHoster.model.Comments;
 import ImageHoster.model.Image;
 import ImageHoster.model.Tag;
 import ImageHoster.model.User;
+import ImageHoster.service.CommentService;
 import ImageHoster.service.ImageService;
 import ImageHoster.service.TagService;
 import ImageHoster.service.ValidatorService;
@@ -31,6 +33,9 @@ public class ImageController {
     @Autowired
     private TagService tagService;
 
+    @Autowired
+    private CommentService commentsService;
+
     //This method displays all the images in the user home page after successful login
     @RequestMapping("images")
     public String getUserImages(Model model) {
@@ -57,8 +62,10 @@ public class ImageController {
         Image image = imageService.getImage(id);
         model.addAttribute("image", image);
         model.addAttribute("tags", image.getTags());
+        model.addAttribute("comments",commentsService.getComment(image));
         return "images/image";
     }
+
 
     //This controller method is called when the request pattern is of type 'images/upload'
     //The method returns 'images/upload.html' file
@@ -104,8 +111,8 @@ public class ImageController {
         Image currentImage = imageService.getImage(imageId);
         User sessionUser  = (User)session.getAttribute("loggeduser");
         User imageOwner = currentImage.getUser();
+        Image image = imageService.getImage(imageId);
         if(validatorService.checkUser(sessionUser,imageOwner)){
-            Image image = imageService.getImage(imageId);
             String tags = convertTagsToString(image.getTags());
             model.addAttribute("image", image);
             model.addAttribute("tags", tags);
@@ -114,7 +121,7 @@ public class ImageController {
             model.addAttribute("editError","Only the owner of the image can edit the image");
             model.addAttribute("image",currentImage);
             model.addAttribute("tags", currentImage.getTags());
-
+            model.addAttribute("comments",commentsService.getComment(image));
             return "/images/image";
         }
 
@@ -150,7 +157,6 @@ public class ImageController {
         updatedImage.setUser(user);
         updatedImage.setTags(imageTags);
         updatedImage.setDate(new Date());
-
         imageService.updateImage(updatedImage);
         return "redirect:/images/"+updatedImage.getId() +"/"+ updatedImage.getTitle();
     }
@@ -166,12 +172,13 @@ public class ImageController {
         Image currentImage = imageService.getImage(imageId);
         User imageUser = currentImage.getUser();
         if(validatorService.checkUser(sessionUser,imageUser)) {
-            imageService.deleteImage(imageId);
+            imageService.deleteImage(currentImage);
             return "redirect:/images";
         }else{
             model.addAttribute("deleteError","Only the owner of the image can delete the image");
             model.addAttribute("image",currentImage);
             model.addAttribute("tags", currentImage.getTags());
+            model.addAttribute("comments",commentsService.getComment(currentImage));
             return "/images/image";
         }
     }
